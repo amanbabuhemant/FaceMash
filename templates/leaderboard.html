@@ -1,0 +1,10 @@
+<!-- learedrboard -->
+{% extends "base.html" %}
+{% block title %}Leaderboard{% endblock %}
+{% block body %}
+{% for pic in pictures %}
+<div class="picture" id="{{ pic.id }}">
+<b class="rank">{{ loop.index }}</b><img src="{{ pic.image_path }}" />
+</div><br>
+{% endfor %}
+{% endblock %}

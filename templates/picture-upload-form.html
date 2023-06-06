@@ -1,0 +1,9 @@
+<!--picture upload form -->
+{% extends "base.html" %}
+{% block title %}Upload{% endblock %}
+{% block body %}
+<form action="/upload" method="POST" enctype="multipart/form-data">
+<input type="file" name="img" value="Select picture" multiple umique/>
+<input type="submit" value="upload" />
+</form>
+{% endblock %}
