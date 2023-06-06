@@ -1,0 +1,14 @@
+/* picture comparision style */
+.comparison img {
+max-height: 100px;
+max-width: 100px;
+}
+/* leaderboared style */
+.picture {
+display: inline-block;
+border: 1px solid black;
+}
+.picture img {
+max-height: 200px;
+max-width: 200px;
+}
