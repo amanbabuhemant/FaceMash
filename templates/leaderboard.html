@@ -4,7 +4,20 @@
 {% block body %}
 {% for pic in pictures %}
 <div class="picture" id="{{ pic.id }}">
-<b class="rank">{{ loop.index }}</b><img src="{{ pic.image_path }}" />
+<b class="rank">{{ page * 10 - 10 + loop.index }}</b><img src="/pictures/{{ pic.id }}.png" />
 </div><br>
 {% endfor %}
+
+{% if pics_count > 0 %}
+<a href="/leaderboard?p=1">1</a>
+{% endif %}
+
+{% for p in range(2, pics_count//10) %}
+<a href="/leaderboard?p={{p}}">{{p}}</a>
+{% endfor %}
+
+{% if pics_count >= 20 %}
+<a href="/leaderboard?p={{ pics_count // 10 }}">{{ pics_count // 10 }}</a>
+{% endif %}
+
 {% endblock %}

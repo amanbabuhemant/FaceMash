@@ -1,24 +1,11 @@
 #FaceMash
 #01/06/2023
 
-class picture:
-    
-    def __init__(self, id, votes = 0):
-        self.id = id
-        self.votes = votes
-        self.image_path = "pictures/" + str(id) + ".png"
-
-    def __gt__(self, other):
-        return self.votes > other.votes
-        
-    def __lt__(self, other):
-        return self.votes < other.votes
-
 from flask import Flask, render_template, request, redirect, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from random import choice
 
-app = Flask("__name__")
+app = Flask(__name__)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
 
@@ -36,12 +23,10 @@ def home():
     pics_data = pictures.query.all()
     if len(pics_data) < 2:
         return redirect("/add-picture")
-    pics_objs = []
-    for p in pics_data:
-        pics_objs.append(picture(id=p.id, votes=p.votes))
-    pic1 = choice(pics_objs)
-    pics_objs.remove(pic1)
-    pic2 = choice(pics_objs)
+    
+    pic1 = choice(pics_data)
+    pics_data.remove(pic1)
+    pic2 = choice(pics_data)
     return render_template("comparison.html", pic1=pic1, pic2=pic2)
 
 @app.route("/vote", methods=["POST"])
@@ -61,12 +46,15 @@ def vote():
 
 @app.route("/leaderboard")
 def leaderboard():
-    pics_data = pictures.query.all()
-    pics_objs = []
-    for p in  pics_data:
-        pics_objs.append(picture(id=p.id, votes=p.votes))
-    pics_objs.sort(reverse=True)
-    return render_template("leaderboard.html", pictures=pics_objs)
+    if "p" in request.args:
+        page = int(request.args.get("p"))
+        if page < 1: page = 1
+    else:
+        page = 1
+    pics_data = pictures.query.order_by(pictures.votes).offset(page * 10 - 10).limit(10).all()
+    pics_count = pictures.query.count()
+    print(pics_count)
+    return render_template("leaderboard.html", pictures=pics_data, page=page, pics_count=pics_count)
 
 @app.route("/add-picture")
 def add_picture():
@@ -79,8 +67,7 @@ def upload():
         
         db.session.add(pic_entry)
         
-        pic = picture(id=pictures.query.count(), votes=0)
-        file.save(pic.image_path)
+        file.save("pictures/" + str(pictures.query.count()) + ".png")
         print(file)
     db.session.commit()
     return redirect("/add-picture")

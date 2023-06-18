@@ -7,13 +7,13 @@
 <form action="/vote" method="POST">
 <input type="hidden" name="winner" value="{{ pic1.id }}" />
 <input type="hidden" name="looser" value="{{ pic2.id }}" />
-<button><img id="picture-1" name="vote" src="{{ pic1.image_path }}" /></button>
+<button><img id="picture-1" src="/pictures/{{ pic1.id }}.png" /></button>
 </form>
 </td><td>
 <form action="/vote" method="POST">
 <input type="hidden" name="winner" value="{{ pic2.id }}" />
 <input type="hidden" name="looser" value="{{ pic1.id }}" />
-<button><img id="picture-2" src="{{ pic2.image_path }}" /></button>
+<button><img id="picture-2" src="/pictures/{{ pic2.id }}.png" /></button>
 </form>
 </td></tr></table>
 </div>
